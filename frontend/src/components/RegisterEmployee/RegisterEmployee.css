@@ -1,0 +1,76 @@
+.form-info-wrapper{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.register-header-text{
+    font-weight: bold;
+    margin-bottom: 20px;   
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.personal-info {
+    width: 50%;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 30px;
+}
+
+.company-info{
+    width: 50%;
+    height: 50%;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+input[type=text], select {
+    width: 100%;
+    padding: 20px;
+    margin: 10px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-bottom: 40px;
+
+  }
+  
+  button[name="register-btn"] {
+    background-color: #1D5FAD;
+    width: 40%;
+    display: block;
+    margin: 20px auto;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 18px;
+    color: white;
+    padding: 16px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.input-container{
+    padding-top: 30px;
+}
+
+input[type="submit"]:hover {
+    background-color: lightblue;
+}
+
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
