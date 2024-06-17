@@ -1,173 +1,314 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
-import express from 'express';
-import bodyParser from 'body-parser';
-import cors from 'cors';
-import swaggerJSDoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
-import jwt from 'jsonwebtoken';
-import { getEmployees, addEmployee, getUser, addUser, getEmployee, getUsers, updateEmployee, deleteEmployee, deleteUser, updateUser, authenticateToken } from './database.js';
-
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-app.use(bodyParser.json());
-
-
-const swaggerSpec = swaggerJSDoc(options);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-/**
- * @swagger
- *  components:
- *        schemas:
- *            Employee:
- *                    type: object
- *                    properties:
- *                         id: 
- *                            type: integer
- *                         firstName:
- *                                  type: string
- *                         lastName: 
- *                            type: string
- *                         email:
- *                                  type: string
- *                         nationalIdentity: 
- *                            type: integer
- *                         telephone:
- *                                  type: integer
- *                         department: 
- *                            type: string
- *                         position:
- *                                  type: string
- *                         laptopManufacturer:
- *                                  type: string
- *                         laptopModel: 
- *                            type: string
- *                         serialNumber:
- *                                  type: integer
- */
-
-/**
- * @swagger
- * /employees:
- *    get:
- *      summary: To get all employees from db
- *      tags: [employees]
- *      description: This api is used to retrieve data from the database
- *      responses:
- *            200:
- *                description: This api is used to retrieve data from the database
- *                content:
- *                    application/json: 
- *                            schema:
- *                                type: array
- *                                items: 
- *                                    $ref: '#components/schemas/Employee'
- */
-
-
-/**
- * @swagger
- * /employees/{id}:
- *    get:
- *      summary: To get a specified employee from db
- *      tags: [employees]
- *      description: This api is used to retrieve data from the database
- *      parameters: 
- *           - in: path
- *             name: id
- *             required: true 
- *             description: Numeric ID required
- *             schema:
- *               type: integer
- *      responses:
- *            200:
- *                description: This api is used to retrieve data from the database
- *                content:
- *                    application/json: 
- *                            schema:
- *                                type: array
- *                                items: 
- *                                    $ref: '#components/schemas/Employee'
- */
-
-
-
-/**
- * @swagger
- * /employees/addEmployee:
- *    post:
- *      summary: To add an employee to db
- *      tags: [employees]
- *      description: This api is used to insert data to the database
- *      requestBody:
- *            required: true
- *            content:
- *                application/json:
- *                      schema:
- *                          $ref: '#components/schemas/Employee'
- *      responses:
- *            200:
- *                description: Added Successfully 
- */
-
-/**
- * @swagger
- * components:
- *     schemas:
- *         User:
- *              type: object
- *              properties:
- *                     userName:
- *                          type: string
- *                     password:
- *                          type: string
- */
-
-/**
- * @swagger
- * /users:
- *    get:
- *      summary: To get all users
- *      tags: [users]
- *      description: This api is used to retrieve data from the database
- *      responses:
- *            200:
- *                description: This api is used to retrieve data from the database
- *                content:
- *                    application/json: 
- *                            schema:
- *                                type: array
- *                                items: 
- *                                    $ref: '@components/schemas/User'
- */
-
-/**
- * @swagger
- * /users/{id}:
- *    get:
- *      summary: To get a specified user from db
- *      tags: [users]
- *      description: This api is used to retrieve data from the database
- *      parameters:
- *           - in: path
- *             name: id
- *             required: true 
- *             description: Numeric ID required
- *             schema:
- *               type: integer
- *      responses:
- *            200:
- *                description: This api is used to retrieve data from the database
- *                content:
- *                    application/json: 
- *                            schema:
- *                                type: array
- *                                items: 
- *                                    $ref: '#components/schemas/User'
- */
-
-
+export const doc = swaggerDoc({
+    info: {
+        title: 'Employee API',
+        version: '1.0.0',
+        description: 'A system for distributing equipments to employees',
+    },
+    host: 'localhost:9000',
+    basePath: '/',
+    schemes: ['http'],
+    consumes: ['application/json'],
+    produces: ['application/json'],
+    tags: [
+        { name: 'Employee', description: 'Employee operations' },
+        { name: 'User', description: 'User operations' }
+    ],
+    paths: {
+        '/employees': {
+            get: {
+                tags: ['Employee'],
+                summary: 'Get all employees',
+                responses: {
+                    200: {
+                        description: 'Employees were obtained',
+                        schema: {
+                            type: 'array',
+                            items: {
+                                $ref: '#/definitions/Employee'
+                            }
+                        }
+                    },
+                    500: {
+                        description: 'Internal server error'
+                    }
+                }
+            }
+        },
+        '/employee/{id}': {
+            get: {
+                tags: ['Employee'],
+                summary: 'Get employee by id',
+                parameters: [
+                    {
+                        name: 'id',
+                        in: 'path',
+                        required: true,
+                        type: 'string'
+                    }
+                ],
+                responses: {
+                    200: {
+                        description: 'Employee was obtained',
+                        schema: {
+                            $ref: '#/definitions/Employee'
+                        }
+                    },
+                    500: {
+                        description: 'Internal server error'
+                    }
+                }
+            }
+        },
+        '/employees/addEmployee': {
+            post: {
+                tags: ['Employee'],
+                summary: 'Create employee',
+                parameters: [
+                    {
+                        name: 'employee',
+                        in: 'body',
+                        required: true,
+                        schema: {
+                            $ref: '#/definitions/Employee'
+                        }
+                    }
+                ],
+                responses: {
+                    201: {
+                        description: 'Employee was created',
+                        schema: {
+                            $ref: '#/definitions/Employee'
+                        }
+                    },
+                    500: {
+                        description: 'Internal server error'
+                    }
+                }
+            }
+        },
+        '/employees/updateEmployee/{id}': {
+            put: {
+                tags: ['Employee'],
+                summary: 'Update employee by id',
+                parameters: [
+                    {
+                        name: 'id',
+                        in: 'path',
+                        required: true,
+                        type: 'string'
+                    },
+                    {
+                        name: 'employee',
+                        in: 'body',
+                        required: true,
+                        schema: {
+                            $ref: '#/definitions/Employee'
+                        }
+                    }
+                ],
+                responses: {
+                    201: {
+                        description: 'Employee was updated',
+                        schema: {
+                            $ref: '#/definitions/Employee'
+                        }
+                    },
+                    500: {
+                        description: 'Internal server error'
+                    }
+                }
+            }
+        },
+        '/employees/deleteEmployee/{id}': {
+            delete: {
+                tags: ['Employee'],
+                summary: 'Delete employee by id',
+                parameters: [
+                    {
+                        name: 'id',
+                        in: 'path',
+                        required: true,
+                        type: 'string'
+                    }
+                ],
+                responses: {
+                    201: {
+                        description: 'Employee was deleted',
+                        schema: {
+                            $ref: '#/definitions/Employee'
+                        }
+                    },
+                    500: {
+                        description: 'Internal server error'
+                    }
+                }
+            }
+        },
+        '/users': {
+            get: {
+                tags: ['User'],
+                summary: 'Get all users',
+                responses: {
+                    200: {
+                        description: 'Users were obtained',
+                        schema: {
+                            type: 'array',
+                            items: {
+                                $ref: '#/definitions/User'
+                            }
+                        }
+                    },
+                    500: {
+                        description: 'Internal server error'
+                    }
+                }
+            }
+        },
+        '/user/{id}': {
+            get: {
+                tags: ['User'],
+                summary: 'Get user by id',
+                parameters: [
+                    {
+                        name: 'id',
+                        in: 'path',
+                        required: true,
+                        type: 'string'
+                    }
+                ],
+                responses: {
+                    200: {
+                        description: 'User was obtained',
+                        schema: {
+                            $ref: '#/definitions/User'
+                        }
+                    },
+                    500: {
+                        description: 'Internal server error'
+                    }
+                }
+            }
+        },
+        '/users/addUser': {
+            post: {
+                tags: ['User'],
+                summary: 'Create user',
+                parameters: [
+                    {
+                        name: 'user',
+                        in: 'body',
+                        required: true,
+                        schema: {
+                            $ref: '#/definitions/User'
+                        }
+                    }
+                ],
+                responses: {
+                    201: {
+                        description: 'User was created',
+                        schema: {
+                            $ref: '#/definitions/User'
+                        }
+                    },
+                    500: {
+                        description: 'Internal server error'
+                    }
+                }
+            }
+        },
+        '/users/updateUser/{id}': {
+            put: {
+                tags: ['User'],
+                summary: 'Update user by id',
+                parameters: [
+                    {
+                        name: 'id',
+                        in: 'path',
+                        required: true,
+                        type: 'string'
+                    },
+                    {
+                        name: 'user',
+                        in: 'body',
+                        required: true,
+                        schema: {
+                            $ref: '#/definitions/User'
+                        }
+                    }
+                ],
+                responses: {
+                    201: {
+                        description: 'User was updated',
+                        schema: {
+                            $ref: '#/definitions/User'
+                        }
+                    },
+                    500: {
+                        description: 'Internal server error'
+                    }
+                }
+            }
+        },
+        '/users/deleteUser/{id}': {
+            delete: {
+                tags: ['User'],
+                summary: 'Delete user by id',
+                parameters: [
+                    {
+                        name: 'id',
+                        in: 'path',
+                        required: true,
+                        type: 'string'
+                    }
+                ],
+                responses: {
+                    201: {
+                        description: 'User was deleted',
+                        schema: {
+                            $ref: '#/definitions/User'
+                        }
+                    },
+                    500: {
+                        description: 'Internal server error'
+                    }
+                }
+            }
+        }
+    },
+    definitions: {
+        Employee: {
+            type: 'object',
+            properties: {
+                id: {
+                    type: 'string'
+                },
+                name: {
+                    type: 'string'
+                },
+                email: {
+                    type: 'string'
+                },
+                phone: {
+                    type: 'string'
+                }
+            }
+        },
+        User: {
+            type: 'object',
+            properties: {
+                id: {
+                    type: 'string'
+                },
+                name: {
+                    type: 'string'
+                },
+                email: {
+                    type: 'string'
+                },
+                phone: {
+                    type: 'string'
+                }
+            }
+        }
+    }
+})

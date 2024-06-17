@@ -3,7 +3,7 @@ import express from 'express';
 
 
 
-const userRoutes = express();
+const userRoutes = express.Router();
 
 userRoutes.get('/users', getAllUsers)
 userRoutes.get('/user/:id', getUserById)
