@@ -13,6 +13,7 @@ export const getEmployeeById = async (req, res) => {
     try {
         const id = req.params.id;
         const employee = await EmployeeModel.findOne({ id })
+        console.log(id, employee)
         res.send(employee);
     } catch (error) {
         res.status(500).json({ message: error.message })
@@ -42,8 +43,12 @@ export const updateEmployeeById = async(req, res) => {
 export const deleteEmployeeById = async(req, res) => {
     try {
         const {id} = req.params;
-        const employee = await EmployeeModel.destroy( { where : { id }});
-        res.status(201).send(employee)
+        const employeeExists = await EmployeeModel.findOne({where: {id}})
+
+        console.log(employeeExists)
+
+        const deletedEmployee = await EmployeeModel.destroy( { where : { id }});
+        res.status(201).send({message: "Successfully deleted employee"})
     } catch (error) {
         res.status(500).json({ message: error.message })
     }

@@ -132,7 +132,7 @@ const baseColumns = [
 
 const handleEdit = (record) => {
   console.log("Edit", record);
-  // Implement edit functionality here
+
 };
 const handleDelete = (record) => {
   console.log("Delete", record);

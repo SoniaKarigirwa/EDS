@@ -36,7 +36,7 @@ UserModel.sync({ alter: true })
     console.log("Data table created successfully");
   })
   .catch((error) => {
-    console.error("Error creating Data table:", error);
+    console.error("Error creating Data table for user:", error);
   });
 
 export default UserModel

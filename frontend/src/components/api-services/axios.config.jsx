@@ -7,6 +7,6 @@ export const api = _.create({
 export const AuthApi = _.create({
   baseURL: baseUrl,
   headers: {
-    Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+    'auth-token': `Bearer ${sessionStorage.getItem("token")}`,
   },
 });

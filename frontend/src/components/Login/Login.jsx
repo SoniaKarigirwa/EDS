@@ -9,7 +9,7 @@ import { notification } from 'antd';
 
 const Login = () => {
     const [values, setValues] = useState({
-        userName: '',
+        username: '',
         password: ''
     })
     const navigate = useNavigate();
@@ -25,12 +25,14 @@ const Login = () => {
             axios.post('http://localhost:9000/login', values)
            
                 .then(res => {
-                    sessionStorage.setItem("token", res.data.accessToken)
-                    if (res.data.accessToken) {
+                    sessionStorage.setItem("token", res.data.data.access_token)
+                    if (res.data.data.access_token) {
                         notification.success({
                             message:"Logged in successfully!"
                         })
-                        navigate('/employeelist')
+                        console.log('res', res)
+                        // navigate('/employeelist')
+                        window.location.href = '/employeelist'
                     } else {
                         alert("Try again");
                     }
@@ -48,14 +50,14 @@ const Login = () => {
                     <div className='input-container'>
                         <div className='input-box'>
                             <label>Username</label>
-                            <input type="text" placeholder='User Name' name='userName' onChange={handleInput} required />
-                            {errors.email && <span> {errors.userName}</span>}
+                            <input type="text" placeholder='User Name' name='username' onChange={handleInput} required />
+                            {/* {errors.email && <span> {errors.username}</span>} */}
                         </div>
 
                         <div className='input-box'>
                             <label>Password</label>
                             <input type="password" placeholder='Password' name='password' onChange={handleInput} required />
-                            {errors.password && <span> {errors.password}</span>}
+                            {/* {errors.password && <span> {errors.password}</span>} */}
                         </div>
                     </div>
 

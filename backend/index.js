@@ -22,6 +22,8 @@ app.use(cors());
 app.use(corsFunction);
 app.use(json());
 app.use(morgan("dev"));
+app.use(employeeRoutes)
+app.use(userRoutes) 
 
 const swaggerOptions = {
   swaggerDefinition: {
@@ -39,8 +41,7 @@ const swaggerOptions = {
 
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-app.use(employeeRoutes)
-app.use(userRoutes) 
+
 
 
 // Start the server

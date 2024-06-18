@@ -1,4 +1,38 @@
 import UserModel from "../models/userModel.js";
+import { errorResponse, serverErrorResponse, successResponse } from "../utils/api.response.js";
+import { signToken } from "../utils/jwt.utils.js";
+
+export const login = async (req, res) => {
+    try {
+      const {
+        username,
+        password
+      } = req.body;
+  
+      let findUserByEmail = await UserModel.findOne({
+        where: {
+          username
+        }
+      });
+      // console.log(newUser);
+      if (!findUserByEmail) return errorResponse("Invalid email or password!", res)
+  
+      const validPassword = await compare(password, findUserByEmail.password);
+      if (!validPassword) return errorResponse('Invalid email or password!', res);
+  
+      const token = signToken({ id: findUserByEmail.id });
+  
+      return successResponse("Login successful!",{access_token: token},res);
+  
+    } catch (error) {
+      return serverErrorResponse(error, res);
+    }
+  };
+
+const compare=(inputPassword,userPassword)=>
+    {
+        return inputPassword===userPassword
+    }
 
 export const getAllUsers = async (req, res) => {
     try {

@@ -4,6 +4,7 @@ import Validation from './RegisterEmployeeValidation';
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 import { notification } from 'antd';
+import { AuthApi } from '../api-services/axios.config';
 
 const RegisterEmployee = () => {
     const [values, setValues] = useState({
@@ -29,9 +30,9 @@ const RegisterEmployee = () => {
     const handleSubmit = async(e) => {
         setErrors(Validation(values));
         // if (errors.firstName === "" && errors.lastName === "" && errors.email === "" && errors.nationalIdentity === "" && errors.telephone === "" && errors.department === "" && errors.position === "" && errors.laptopManufacturer === "" && errors.laptopModel === "" && errors.serialNumber === "") {
-            await axios.post('http://localhost:9000/employees/addEmployee', values)
+            await AuthApi.post('http://localhost:9000/employees/addEmployee',  values)
                 .then(res => {
-                    if(res.data.success){
+                    if(res.data.data.success){
                         notification.success({
                             message:"Employee added successfully!"
                         })
@@ -62,11 +63,11 @@ const RegisterEmployee = () => {
 
                         <div className='input-box'>
                             <input type="text" placeholder='Email' name='email' onChange={handleInput} required />
-                            {errors.password && <span> {errors.password}</span>}
+                            {/* {errors.password && <span> {errors.password}</span>} */}
                         </div>
 
                         <div className='input-box'>
-                            <input type="number" placeholder='National Identity' name='nationalIdentity' onChange={handleInput} required />
+                            <input type="text" placeholder='National Identity' name='nationalIdentity' onChange={handleInput} required />
                         </div>
 
                         <div className='input-box'>
@@ -96,7 +97,7 @@ const RegisterEmployee = () => {
                         </div>
                     </div>
                 </div>
-                <button name='register-btn' type="submit" onClick={(e) => handleSubmit(e)}>Register Employee</button>
+                <button name='register-btn' type="button" onClick={(e) => handleSubmit(e)}>Register Employee</button>
 
             </form>
         </div>

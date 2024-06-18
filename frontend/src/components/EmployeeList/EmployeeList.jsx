@@ -12,7 +12,8 @@ const EmployeeList = () => {
     const getAllEmployees = async () => {
         try {
             const response = await AuthApi.get('/employees');
-            setData(response.data);
+            console.log('res', response)
+            setData(response?.data??[]);
         } catch (error) {
             console.log(error);
             throw error;

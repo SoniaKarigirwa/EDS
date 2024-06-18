@@ -68,7 +68,7 @@ EmployeeModel.sync({ alter: true })
     console.log("Employee table created successfully");
   })
   .catch((error) => {
-    console.error("Error creating Data table:", error);
+    console.error("Error creating Data table for employeee:", error);
   });
 
 
